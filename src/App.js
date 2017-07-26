@@ -13,6 +13,15 @@ class BooksApp extends React.Component {
     showSearchPage: true
   }
 
+  componentDidMount(){
+     BooksAPI.getAll().then(books => {
+      console.log(books);
+      // this.setState(state => ({
+      //     books: state.books.concat([ books ])
+      // }))
+    })
+  }
+
   render() {
     return (
       <div className="app">
