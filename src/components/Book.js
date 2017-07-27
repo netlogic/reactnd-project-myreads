@@ -5,6 +5,26 @@ import PropTypes from 'prop-types';
 
 export default class Book extends React.Component {
 
+    handleChange(e, book) {
+        let newShelf = e.target.value;
+        let move = false;
+
+        if (newShelf !== book.shelf) {
+            if (newShelf === 'none') {
+                if (confirm(`Are you sure you want to remove ${book.title} from your books?`)) {
+                    move = true;
+                }
+            } else {
+                if (confirm(`Are you sure you want to move ${book.title} to a different shelf?`)) {
+                    move = true;
+                }
+            }
+        }
+        if (move) {
+            alert("move!");
+        }
+    }
+
     render() {
         let { book } = this.props;
 
@@ -14,7 +34,9 @@ export default class Book extends React.Component {
                     <div className="book-top">
                         <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                         <div className="book-shelf-changer">
-                            <select value={book.shelf}>
+                            <select value={book.shelf} onChange={(e) => {
+                                this.handleChange(e, book);
+                            }}>
                                 <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
