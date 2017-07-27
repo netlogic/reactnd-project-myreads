@@ -4,6 +4,8 @@ import './App.css'
 import SearchBooks from './components/SearchBooks.js'
 import ListBooks from './components/ListBooks.js'
 import { Route } from 'react-router-dom'
+import escapeRegExp from 'escape-string-regexp'
+import sortBy from 'sort-by'
 
 class BooksApp extends React.Component {
   state = {
@@ -20,7 +22,7 @@ class BooksApp extends React.Component {
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       console.log(books);
-      this.setState({ books });
+      this.setState({ books : books.sort(sortBy('title')) });
     })
   }
 
