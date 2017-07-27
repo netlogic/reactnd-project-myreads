@@ -19,15 +19,37 @@ class BooksApp extends React.Component {
     books: []
   }
 
+  constructor(props) {
+    super();
+    this.onShelfChange.bind(this);
+  }
+
   componentDidMount() {
     BooksAPI.getAll().then(books => {
       console.log(books);
       this.setState({ books : books.sort(sortBy('title')) });
-    })
+    }).catch(function() {
+        alert( "An error happen talking to the book server.  Please check your internet connection and refresh page to try again!")
+    });
   }
 
   onShelfChange( book , shelf ) {
-    alert( "move " + book.title + " to " + shelf );
+
+    BooksAPI.update( book, shelf ).then( res => {
+       let newBooks;
+        console.log(res);
+        // remove the book from the current array
+       newBooks  = this.state.books.filter( (oldbook) => { 
+                return ( book.id !== oldbook.id )
+            } );
+        if ( shelf !== 'none' ) {  
+          book.shelf = shelf;
+        }
+        newBooks.push( book );
+        this.setState({ books : newBooks.sort(sortBy('title')) });
+    }).catch(function() {
+        alert( "An error happen.  Please check your internet connection try again!")
+    });
   }
 
   render() {
@@ -35,7 +57,7 @@ class BooksApp extends React.Component {
       <div className="app">
         <Route exact path='/' render={() => {
           return (
-            <ListBooks books={this.state.books} onShelfChange={this.onShelfChange}/>
+            <ListBooks books={this.state.books} onShelfChange={ (book,shelf) => { this.onShelfChange(book,shelf)} }/>
           );
         }} />
         <Route exact path='/search' render={(history) => {
