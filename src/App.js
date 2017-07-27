@@ -4,7 +4,6 @@ import './App.css'
 import SearchBooks from './components/SearchBooks.js'
 import ListBooks from './components/ListBooks.js'
 import { Route } from 'react-router-dom'
-import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
 class BooksApp extends React.Component {
@@ -26,7 +25,7 @@ class BooksApp extends React.Component {
 
   componentDidMount() {
     BooksAPI.getAll().then(books => {
-      console.log(books);
+      //console.log(books);
       this.setState({ books : books.sort(sortBy('title')) });
     }).catch(function() {
         alert( "An error happen talking to the book server.  Please check your internet connection and refresh page to try again!")
@@ -37,7 +36,7 @@ class BooksApp extends React.Component {
 
     BooksAPI.update( book, shelf ).then( res => {
        let newBooks;
-        console.log(res);
+        //console.log(res);
         // remove the book from the current array
        newBooks  = this.state.books.filter( (oldbook) => { 
                 return ( book.id !== oldbook.id )

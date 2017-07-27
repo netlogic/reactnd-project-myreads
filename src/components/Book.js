@@ -35,7 +35,7 @@ export default class Book extends React.Component {
         }
 
         if (!imageURL) {
-            console.log("this book has no image, database needs to be fixed! ", book);
+            // console.log("this book has no image, database needs to be fixed! ", book);
             imageURL = "./favicon.ico";
         }
 

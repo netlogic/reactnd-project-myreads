@@ -15,20 +15,20 @@ go to a terminal window
 
 clone my repository
 
-    git clone https://github.com/netlogic/reactnd-project-myreads.git
+    `git clone https://github.com/netlogic/reactnd-project-myreads.git`
 
 go to the directory reactnd-project-myreads.git
 
-    cd reactnd-project-myreads.git
+    `cd reactnd-project-myreads`
 
 install needed packages
 
-    npm install
+    `npm install`
 
 
 start the sample application
 
-    npm start
+    `npm start`
 
 Have fun moving books around and searching!
 

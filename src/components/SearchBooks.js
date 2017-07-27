@@ -52,7 +52,7 @@ export default class SearchBooks extends React.Component {
 
     executeQuery(q) {
         let lastQuery = q;
-        console.log("executing search query = " + q);
+        //console.log("executing search query = " + q);
         this.setState({ executingQuery: true, query: q });
         BooksAPI.search(q, 20).then(books => {
             if ( lastQuery !== this.state.query  ) {
@@ -62,13 +62,14 @@ export default class SearchBooks extends React.Component {
             if ( Array.isArray( books ) ) {
                 this.fixShelfForBadServerData( books );
                 this.setState({ books: books.sort(sortBy('title')), executingQuery: false });
-                console.log( books );
+                //console.log( books );
             } else {
                 // empty query
                 this.setState({ executingQuery: false , books : []  });
             }
         }).catch(  (error) => {
-            console.log("Error on search " + JSON.stringify(error));
+            // console.log("Error on search " + JSON.stringify(error));
+            alert( "Error on search, please check internet connection and try again");
             this.setState({ executingQuery: false });
         });
     }
