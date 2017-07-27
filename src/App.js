@@ -42,10 +42,10 @@ class BooksApp extends React.Component {
        newBooks  = this.state.books.filter( (oldbook) => { 
                 return ( book.id !== oldbook.id )
             } );
+        book.shelf = shelf;
         if ( shelf !== 'none' ) {  
-          book.shelf = shelf;
+          newBooks.push( book );
         }
-        newBooks.push( book );
         this.setState({ books : newBooks.sort(sortBy('title')) });
     }).catch(function() {
         alert( "An error happen.  Please check your internet connection try again!")
@@ -62,7 +62,7 @@ class BooksApp extends React.Component {
         }} />
         <Route exact path='/search' render={(history) => {
           return (
-            <SearchBooks onShelfChange={ (book,shelf) => { this.onShelfChange(book,shelf)} }/>
+            <SearchBooks currentBooks={this.state.books} onShelfChange={ (book,shelf) => { this.onShelfChange(book,shelf)} }/>
           );
         }} />
       </div>

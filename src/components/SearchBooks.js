@@ -4,8 +4,9 @@ import * as BooksAPI from '../BooksAPI'
 import sortBy from 'sort-by'
 import Book from './Book.js'
 import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
-export default class BooksApp extends React.Component {
+export default class SearchBooks extends React.Component {
 
     state = {
         query: '',
@@ -22,7 +23,7 @@ export default class BooksApp extends React.Component {
     }
 
     clearQuery = () => {
-        this.setState({ query: '', books: [] })
+        this.setState({ query: '', books : [] })
     }
 
     componentDidMount() {
@@ -31,11 +32,41 @@ export default class BooksApp extends React.Component {
         }
     }
 
+    // the server is not correctly 
+    // returning the user shelf on search
+    // results.  This routine looks 
+    // through current books
+    // and correct the shelfs for the user
+    fixShelfForBadServerData( books ) {
+        let currentBooks = this.props.currentBooks;
+        books.map( book=> {
+            currentBooks.map( currentBook => {
+                if ( currentBook.id === book.id ) {
+                    book.shelf = currentBook.shelf;
+                }
+                return currentBook;
+            });
+            return book;
+        });
+    }
+
     executeQuery(q) {
+        let lastQuery = q;
         console.log("executing search query = " + q);
         this.setState({ executingQuery: true, query: q });
         BooksAPI.search(q, 20).then(books => {
-            this.setState({ books: books.sort(sortBy('title')), executingQuery: false });
+            if ( lastQuery !== this.state.query  ) {
+                return; // the query has changed while we were loading
+                        // so jsut go hoem
+            }
+            if ( Array.isArray( books ) ) {
+                this.fixShelfForBadServerData( books );
+                this.setState({ books: books.sort(sortBy('title')), executingQuery: false });
+                console.log( books );
+            } else {
+                // empty query
+                this.setState({ executingQuery: false , books : []  });
+            }
         }).catch(  (error) => {
             console.log("Error on search " + JSON.stringify(error));
             this.setState({ executingQuery: false });
@@ -93,3 +124,9 @@ export default class BooksApp extends React.Component {
         )
     }
 }
+
+
+SearchBooks.propTypes = {
+    currentBooks: PropTypes.array.isRequired,
+    onShelfChange: PropTypes.func.isRequired,
+};
