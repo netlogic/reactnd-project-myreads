@@ -12,11 +12,15 @@ export default class BookShelf extends React.Component {
                 <h2 className="bookshelf-title">{this.props.title}</h2>
                 <div className="bookshelf-books">
                     <ol className="books-grid">
-                        {this.props.books.map( (book) =>{
+                        {this.props.books.map((book) => {
                             return (
-                                <Book key={book.id} book={book}/>
+                                <Book key={book.id} book={book} />
                             );
-                        }) }
+                        })}
+                        {!this.props.books.length && (
+                            <p>No books currently on this shelf!</p>
+                        )
+                        }
                     </ol>
                 </div>
             </div>
