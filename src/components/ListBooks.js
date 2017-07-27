@@ -1,5 +1,7 @@
 import React from 'react'
 import '../App.css'
+import PropTypes from 'prop-types';
+
 
 export default class ListBooks extends React.Component {
 
@@ -167,3 +169,8 @@ export default class ListBooks extends React.Component {
         )
     }
 }
+
+
+ListBooks.propTypes = {
+    books: PropTypes.array.isRequired
+};
