@@ -2,7 +2,7 @@ import React from 'react'
 import '../App.css'
 import * as BooksAPI from '../BooksAPI'
 import sortBy from 'sort-by'
-
+import Book from './Book.js'
 
 export default class BooksApp extends React.Component {
 
@@ -14,8 +14,8 @@ export default class BooksApp extends React.Component {
     updateQuery = (query) => {
         let q = query.trim();
         if (q) {
-            this.setState({ query: query.trim() })
-            this.executeQuery();
+            this.setState({ query: q})
+            this.executeQuery(q);
         } else {
             this.clearQuery();
         }
@@ -26,19 +26,24 @@ export default class BooksApp extends React.Component {
     }
 
     componentDidMount() {
-        this.executeQuery();
+        if ( this.state.query ) {
+            this.executeQuery();
+        }
     }
 
-    executeQuery() {
-        BooksAPI.search(this.state.query, 10).then(books => {
+    executeQuery(q) {
+        console.log("executing search query = " + q);
+        BooksAPI.search(q, 20).then(books => {
+           
             this.setState({ books: books.sort(sortBy('title')) });
-        }).catch(function () {
+        }).catch(function (error) {
+            console.log( "Error on search " + JSON.stringify(error) );
             alert("An error happen talking to the book server.  Please check your internet connection and refresh page to try again!")
         });
     }
 
     render() {
-        let { query } = this.state;
+        let { query , books } = this.state;
 
         return (
             <div className="search-books">
@@ -60,9 +65,21 @@ export default class BooksApp extends React.Component {
 
                     </div>
                 </div>
+                
                 <div className="search-books-results">
+                         { this.state.query && books.length === 0 &&  (
+                            <p>Nothing found!</p>
+                        )}
+                        { !this.state.query &&  (
+                            <p>Please enter something to search for</p>
+                        )}
                     <ol className="books-grid">
-
+                   
+                         {books.map((book) => {
+                            return (
+                                <Book key={book.id} book={book} onShelfChange={this.props.onShelfChange} />
+                            );
+                        })}
                     </ol>
                 </div>
             </div>
