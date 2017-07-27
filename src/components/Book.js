@@ -12,7 +12,7 @@ export default class Book extends React.Component {
             <li>
                 <div className="book">
                     <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbNail})` }}></div>
+                        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
                         <div className="book-shelf-changer">
                             <select value={book.shelf}>
                                 <option value="none" disabled>Move to...</option>
@@ -24,7 +24,7 @@ export default class Book extends React.Component {
                         </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{books.authors.join(" + ")}</div>
+                    <div className="book-authors">{book.authors.join(" + ")}</div>
                 </div>
             </li>
         );
