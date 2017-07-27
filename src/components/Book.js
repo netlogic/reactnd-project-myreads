@@ -21,18 +21,29 @@ export default class Book extends React.Component {
             }
         }
         if (move) {
-            this.props.onShelfChange( book , newShelf );
+            this.props.onShelfChange(book, newShelf);
         }
     }
 
     render() {
         let { book } = this.props;
 
+        let imageURL;
+
+        if (book.imageLinks) {
+            imageURL = book.imageLinks.thumbnail || book.imageLinks.smallThumbnail;
+        }
+
+        if (!imageURL) {
+            console.log("this book has no image, database needs to be fixed! ", book);
+            imageURL = "./favicon.ico";
+        }
+
         return (
             <li>
                 <div className="book">
                     <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                        <div className="book-cover" style={{ width: 128, height: 192, backgroundImage: `url(${imageURL})` }}></div>
                         <div className="book-shelf-changer">
                             <select value={book.shelf} onChange={(e) => {
                                 this.handleChange(e, book);
@@ -46,7 +57,7 @@ export default class Book extends React.Component {
                         </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.author !== undefined ? book.authors.join(" + ") : "" }</div>
+                    <div className="book-authors">{book.author !== undefined ? book.authors.join(" + ") : ""}</div>
                 </div>
             </li>
         );
@@ -56,7 +67,7 @@ export default class Book extends React.Component {
 
 Book.propTypes = {
     book: PropTypes.object.isRequired,
-    onShelfChange : PropTypes.func.isRequired,
+    onShelfChange: PropTypes.func.isRequired,
 };
 
 

@@ -3,6 +3,7 @@ import '../App.css'
 import * as BooksAPI from '../BooksAPI'
 import sortBy from 'sort-by'
 import Book from './Book.js'
+import { Link } from 'react-router-dom'
 
 export default class BooksApp extends React.Component {
 
@@ -14,7 +15,6 @@ export default class BooksApp extends React.Component {
     updateQuery = (query) => {
         let q = query.trim();
         if (q) {
-            this.setState({ query: q})
             this.executeQuery(q);
         } else {
             this.clearQuery();
@@ -26,29 +26,29 @@ export default class BooksApp extends React.Component {
     }
 
     componentDidMount() {
-        if ( this.state.query ) {
-            this.executeQuery();
+        if (this.state.query) {
+            this.executeQuery(this.state.query);
         }
     }
 
     executeQuery(q) {
         console.log("executing search query = " + q);
+        this.setState({ executingQuery: true, query: q });
         BooksAPI.search(q, 20).then(books => {
-           
-            this.setState({ books: books.sort(sortBy('title')) });
-        }).catch(function (error) {
-            console.log( "Error on search " + JSON.stringify(error) );
-            alert("An error happen talking to the book server.  Please check your internet connection and refresh page to try again!")
+            this.setState({ books: books.sort(sortBy('title')), executingQuery: false });
+        }).catch(  (error) => {
+            console.log("Error on search " + JSON.stringify(error));
+            this.setState({ executingQuery: false });
         });
     }
 
     render() {
-        let { query , books } = this.state;
+        let { query, books, executingQuery } = this.state;
 
         return (
             <div className="search-books">
                 <div className="search-books-bar">
-                    <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
+                    <Link to="/" className="close-search">>Close</Link>
                     <div className="search-books-input-wrapper">
                         {/* 
                   NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -65,23 +65,30 @@ export default class BooksApp extends React.Component {
 
                     </div>
                 </div>
-                
-                <div className="search-books-results">
-                         { this.state.query && books.length === 0 &&  (
+
+                {executingQuery && (
+                    <a>Searching...</a>
+                )}
+
+                {!executingQuery && (
+                    <div className="search-books-results">
+                        {this.state.query && books.length === 0 && (
                             <p>Nothing found!</p>
                         )}
-                        { !this.state.query &&  (
+                        {!this.state.query && (
                             <p>Please enter something to search for</p>
                         )}
-                    <ol className="books-grid">
-                   
-                         {books.map((book) => {
-                            return (
-                                <Book key={book.id} book={book} onShelfChange={this.props.onShelfChange} />
-                            );
-                        })}
-                    </ol>
-                </div>
+                        <ol className="books-grid">
+
+                            {books.map((book) => {
+                                return (
+                                    <Book key={book.id} book={book} onShelfChange={this.props.onShelfChange} />
+                                );
+                            })}
+                        </ol>
+                    </div>
+                )
+                }
             </div>
         )
     }
