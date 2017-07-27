@@ -17,13 +17,13 @@ export default class ListBooks extends React.Component {
                     <div>
                         <BookShelf title="Currently Reading" books={books.filter((book) => {
                             return (book.shelf === 'currentlyReading');
-                        })} />
+                        })} onShelfChange={this.props.onShelfChange} />
                         <BookShelf title="Want To Read" books={books.filter((book) => {
                             return (book.shelf === 'wantToRead');
-                        })} />
+                        })} onShelfChange={this.props.onShelfChange} />
                         <BookShelf title="Read" books={books.filter((book) => {
                             return (book.shelf === 'read');
-                        })} />
+                        })} onShelfChange={this.props.onShelfChange} />
                     </div>
                 </div>
                 <div className="open-search">
@@ -36,5 +36,6 @@ export default class ListBooks extends React.Component {
 
 
 ListBooks.propTypes = {
-    books: PropTypes.array.isRequired
+    books: PropTypes.array.isRequired,
+    onShelfChange: PropTypes.func.isRequired,
 };

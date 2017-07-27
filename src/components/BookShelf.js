@@ -14,7 +14,7 @@ export default class BookShelf extends React.Component {
                     <ol className="books-grid">
                         {this.props.books.map((book) => {
                             return (
-                                <Book key={book.id} book={book} />
+                                <Book key={book.id} book={book} onShelfChange={this.props.onShelfChange} />
                             );
                         })}
                         {!this.props.books.length && (
@@ -32,4 +32,5 @@ export default class BookShelf extends React.Component {
 BookShelf.propTypes = {
     books: PropTypes.array.isRequired,
     title: PropTypes.string.isRequired,
+    onShelfChange : PropTypes.func.isRequired,
 };

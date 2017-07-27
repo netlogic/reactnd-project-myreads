@@ -21,7 +21,7 @@ export default class Book extends React.Component {
             }
         }
         if (move) {
-            alert("move!");
+            this.props.onShelfChange( book , newShelf );
         }
     }
 
@@ -56,6 +56,7 @@ export default class Book extends React.Component {
 
 Book.propTypes = {
     book: PropTypes.object.isRequired,
+    onShelfChange : PropTypes.func.isRequired,
 };
 
 

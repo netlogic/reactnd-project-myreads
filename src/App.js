@@ -26,12 +26,16 @@ class BooksApp extends React.Component {
     })
   }
 
+  onShelfChange( book , shelf ) {
+    alert( "move " + book.title + " to " + shelf );
+  }
+
   render() {
     return (
       <div className="app">
         <Route exact path='/' render={() => {
           return (
-            <ListBooks books={this.state.books} />
+            <ListBooks books={this.state.books} onShelfChange={this.onShelfChange}/>
           );
         }} />
         <Route exact path='/search' render={(history) => {
